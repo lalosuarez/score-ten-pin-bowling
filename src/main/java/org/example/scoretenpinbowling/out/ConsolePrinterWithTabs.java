@@ -15,7 +15,11 @@ public class ConsolePrinterWithTabs implements Printer {
 
     @Override
     public void print() {
-        if (scoreData.getScores().isEmpty()) return;
+        // Print errors if any
+        if (scoreData.getError() != null) {
+            System.err.println("ERROR! " + scoreData.getError());
+            return;
+        }
 
         // Frames
         printFrames();

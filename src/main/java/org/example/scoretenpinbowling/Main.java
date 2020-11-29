@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         String fileName = null;
         if (args != null && args.length == 1) {
-            fileName = args[0];
+            fileName = args[0].trim().isEmpty() ? null : args[0];
         }
         final ScoreCalculator calculator = new ScoreCalculatorFromFile(
                 new SimpleScoreFileReader(fileName));

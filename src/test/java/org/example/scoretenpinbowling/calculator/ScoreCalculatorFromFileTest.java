@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class ScoreCalculatorFromFileTest {
 
@@ -20,7 +21,7 @@ public class ScoreCalculatorFromFileTest {
         final List<Score> scores = scoreData.getScores();
         assertEquals("Should contain data for 2 users", 2, scores.size());
 
-        List<Score> johnScores = scores.stream()
+        final List<Score> johnScores = scores.stream()
                 .filter(score -> score.getPlayer().getName().equals("John"))
                 .collect(Collectors.toList());
         final Frame[] frames = johnScores.get(0).getFrames();
@@ -39,10 +40,50 @@ public class ScoreCalculatorFromFileTest {
     }
 
     @Test
+    public void testCalculatePerfectGame() {
+        final ScoreCalculator calculator =
+                new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/perfect-game.tsv"));
+        final ScoreData scoreData = calculator.calculate();
+        final Frame[] frames = scoreData.getScores().get(0).getFrames();
+
+        assertEquals("Should contain 10 frames", 10, frames.length);
+        assertEquals(30, frames[0].getScore());
+        assertEquals(60, frames[1].getScore());
+        assertEquals(90, frames[2].getScore());
+        assertEquals(120, frames[3].getScore());
+        assertEquals(150, frames[4].getScore());
+        assertEquals(180, frames[5].getScore());
+        assertEquals(210, frames[6].getScore());
+        assertEquals(240, frames[7].getScore());
+        assertEquals(270, frames[8].getScore());
+        assertEquals(300, frames[9].getScore());
+    }
+
+    @Test
+    public void testCalculateWorstGame() {
+        final ScoreCalculator calculator =
+                new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/worst-game.tsv"));
+        final ScoreData scoreData = calculator.calculate();
+        final Frame[] frames = scoreData.getScores().get(0).getFrames();
+
+        assertEquals("Should contain 10 frames", 10, frames.length);
+        assertEquals(0, frames[0].getScore());
+        assertEquals(0, frames[1].getScore());
+        assertEquals(0, frames[2].getScore());
+        assertEquals(0, frames[3].getScore());
+        assertEquals(0, frames[4].getScore());
+        assertEquals(0, frames[5].getScore());
+        assertEquals(0, frames[6].getScore());
+        assertEquals(0, frames[7].getScore());
+        assertEquals(0, frames[8].getScore());
+        assertEquals(0, frames[9].getScore());
+    }
+
+    @Test
     public void testCalculateFailure(){
         final ScoreCalculator calculator =
                 new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/invalid-content.tsv"));
-        assertEquals("Should contain any data", 0, calculator.calculate().getScores().size());
+        assertNotNull("Should contain error", calculator.calculate().getError());
     }
 
     @Test
@@ -232,7 +273,6 @@ public class ScoreCalculatorFromFileTest {
         assertEquals(90, frames[2].getScore());
         assertEquals(120, frames[3].getScore());
         assertEquals(150, frames[4].getScore());
-        //
         assertEquals(180, frames[5].getScore());
         assertEquals(210, frames[6].getScore());
         assertEquals(240, frames[7].getScore());
