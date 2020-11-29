@@ -1,8 +1,8 @@
 package org.example.scoretenpinbowling.out;
 
-import org.example.scoretenpinbowling.Frame;
-import org.example.scoretenpinbowling.Score;
-import org.example.scoretenpinbowling.ScoreData;
+import org.example.scoretenpinbowling.calculator.Frame;
+import org.example.scoretenpinbowling.calculator.Score;
+import org.example.scoretenpinbowling.calculator.ScoreData;
 
 import java.util.Arrays;
 
@@ -35,7 +35,7 @@ public class ConsolePrinterWithTabs implements Printer {
     private void printPinfalls(Score score) {
         System.out.print("Pinfalls");
         Arrays.stream(score.getFrames()).forEach(frame -> {
-            for (final String ball : frame.getBallRollScores()) {
+            for (final String ball : frame.getBallRollsScores()) {
                 if (ball == null) {
                     System.out.print("\t");
                 } else {

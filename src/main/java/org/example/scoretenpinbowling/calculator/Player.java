@@ -1,4 +1,4 @@
-package org.example.scoretenpinbowling;
+package org.example.scoretenpinbowling.calculator;
 
 public class Player {
     private String name;

@@ -1,5 +1,8 @@
 package org.example.scoretenpinbowling;
 
+import org.example.scoretenpinbowling.calculator.ScoreCalculator;
+import org.example.scoretenpinbowling.calculator.ScoreCalculatorFromFile;
+import org.example.scoretenpinbowling.calculator.ScoreData;
 import org.example.scoretenpinbowling.file.SimpleScoreFileReader;
 import org.example.scoretenpinbowling.out.ConsolePrinterWithTabs;
 import org.example.scoretenpinbowling.out.Printer;

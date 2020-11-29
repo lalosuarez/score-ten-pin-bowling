@@ -1,14 +1,15 @@
-package org.example.scoretenpinbowling;
+package org.example.scoretenpinbowling.calculator;
 
 import java.util.Arrays;
 
 public class Frame {
     private int number;
-    private String[] ballRollScores;
+    private String[] ballRollsScores;
     private int score;
-    private boolean completed;
+    private boolean ballRollsCompleted;
     private boolean hasSpare;
     private boolean hasStrike;
+    private boolean finished;
 
     private static final Integer TEN = 10;
     private static final Integer FIRST_BALL_IDX = 0;
@@ -22,11 +23,12 @@ public class Frame {
         this.number = frameNumber;
         // IF you pull a strike in the first ball at frame 10, you get two more balls
         // because it has to add those two up
-        this.ballRollScores = TEN.equals(frameNumber) ? new String[3] : new String[2];
+        this.ballRollsScores = TEN.equals(frameNumber) ? new String[3] : new String[2];
         this.score = 0;
-        this.completed = false;
+        this.ballRollsCompleted = false;
         this.hasSpare = false;
         this.hasStrike = false;
+        this.finished = false;
     }
 
     public void setBallRollScore(final String ballRollScore) {
@@ -54,7 +56,9 @@ public class Frame {
                 setBallScore(SECOND_BALL_IDX, ballRollScore);
             }
             addScore(convertToInt(ballRollScore));
-            setCompleted();
+            if (!isThreeBallFrameWithSpare()) {
+                setCompleted();
+            }
         } else {
             setBallScore(THIRD_BALL_IDX, ballRollScore);
             addScore(convertToInt(ballRollScore));
@@ -71,13 +75,16 @@ public class Frame {
                 setBallScore(SECOND_BALL_IDX, STRIKE_CHAR);
             } else {
                 setBallScore(THIRD_BALL_IDX, STRIKE_CHAR);
+                setCompleted();
             }
         } else {
             setBallScore(SECOND_BALL_IDX, STRIKE_CHAR);
         }
         setHasStrike();
         addScore(convertToInt(ballRollScore));
-        setCompleted();
+        if (!isThreeBallFrameWithStrike()) {
+            setCompleted();
+        }
     }
 
     private void processFoul(String ballRollScore) {
@@ -93,6 +100,14 @@ public class Frame {
             addScore(convertToInt(ballRollScore));
             setCompleted();
         }
+    }
+
+    private boolean isThreeBallFrameWithStrike() {
+        return this.ballRollsScores.length == 3 && hasStrike;
+    }
+
+    private boolean isThreeBallFrameWithSpare() {
+        return this.ballRollsScores.length == 3 && hasSpare;
     }
 
     private void setHasSpare() {
@@ -115,33 +130,36 @@ public class Frame {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setFinalScore(int score) {
+        setFinished();
         this.score = score;
     }
 
-    public void adjustScore(String ballScore) {
+    public void adjustToFinalScore(String ballScore) {
+        setFinished();
         if (isFoul(ballScore)) return;
         this.score = this.score + convertToInt(ballScore);
     }
 
     private void setBallScore(int idx, String ballScore) {
-        this.ballRollScores[idx] = ballScore;
+        this.ballRollsScores[idx] = ballScore;
     }
 
     private boolean isFirstBall() {
-        return this.ballRollScores[0] == null;
+        return this.ballRollsScores[0] == null;
     }
 
     private boolean isSecondBall() {
-        return this.ballRollScores[1] == null;
+        return this.ballRollsScores[1] == null;
     }
 
+    private void setFinished() { this.finished = true; }
     private void setCompleted() {
-        this.completed = true;
+        this.ballRollsCompleted = true;
     }
 
-    public boolean isCompleted() {
-        return this.completed;
+    public boolean isBallRollsCompleted() {
+        return this.ballRollsCompleted;
     }
 
     private void addScore(int score) {
@@ -157,10 +175,10 @@ public class Frame {
     }
 
     private boolean isSpare(final String ballRollScore) {
-        if (isFoul(this.ballRollScores[0])) {
+        if (isFoul(this.ballRollsScores[0])) {
             return (0 + convertToInt(ballRollScore)) == 10;
         }
-        return (convertToInt(this.ballRollScores[0]) + convertToInt(ballRollScore)) == 10;
+        return (convertToInt(this.ballRollsScores[0]) + convertToInt(ballRollScore)) == 10;
     }
 
     private int convertToInt(final String value) {
@@ -172,14 +190,16 @@ public class Frame {
         return number;
     }
 
-    public String[] getBallRollScores() {
-        return ballRollScores;
+    public String[] getBallRollsScores() {
+        return ballRollsScores;
+    }
+
+    public boolean isFinished() {
+        return finished;
     }
 
     @Override
     public String toString() {
-        return "Frame " + number + " { " +
-                "" + Arrays.toString(ballRollScores) +
-                " score:" + score + " }";
+        return "{ Frame " + number + " " + Arrays.toString(ballRollsScores) + " score:" + score + " }";
     }
 }

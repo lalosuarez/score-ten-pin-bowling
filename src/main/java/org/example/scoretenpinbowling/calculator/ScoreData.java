@@ -1,4 +1,4 @@
-package org.example.scoretenpinbowling;
+package org.example.scoretenpinbowling.calculator;
 
 import java.util.List;
 

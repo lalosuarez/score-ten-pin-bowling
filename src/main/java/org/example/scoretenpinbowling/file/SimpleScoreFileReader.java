@@ -1,6 +1,6 @@
 package org.example.scoretenpinbowling.file;
 
-import org.example.scoretenpinbowling.Score;
+import org.example.scoretenpinbowling.calculator.Score;
 
 import java.io.IOException;
 import java.nio.file.Files;

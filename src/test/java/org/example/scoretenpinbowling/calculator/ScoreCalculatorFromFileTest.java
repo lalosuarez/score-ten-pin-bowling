@@ -1,7 +1,8 @@
-package org.example.scoretenpinbowling;
+package org.example.scoretenpinbowling.calculator;
 
 import org.example.scoretenpinbowling.file.ScoreFileRow;
 import org.example.scoretenpinbowling.file.SimpleScoreFileReader;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -106,7 +107,7 @@ public class ScoreCalculatorFromFileTest {
 
         // (frame 8)
         rows.add(new ScoreFileRow(playerName, "8"));
-        rows.add(new ScoreFileRow(playerName, "f"));
+        rows.add(new ScoreFileRow(playerName, "0"));
 
         // Strike (frame 9)
         rows.add(new ScoreFileRow(playerName, "10"));
@@ -124,7 +125,6 @@ public class ScoreCalculatorFromFileTest {
         assertEquals(57, frames[3].getScore());
         assertEquals(77, frames[4].getScore());
         assertEquals(105, frames[5].getScore());
-        //
         assertEquals(123, frames[6].getScore());
         assertEquals(131, frames[7].getScore());
         assertEquals(151, frames[8].getScore());

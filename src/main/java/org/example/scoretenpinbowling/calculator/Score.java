@@ -1,10 +1,8 @@
-package org.example.scoretenpinbowling;
+package org.example.scoretenpinbowling.calculator;
 
 import java.util.Arrays;
 
 public class Score {
-    public static final int MAX_NUMBER_OF_FRAMES_PER_GAME = 10;
-
     private Player player;
     private Frame[] frames;
 
