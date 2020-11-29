@@ -26,7 +26,7 @@ public class ScoreCalculatorFromFile implements ScoreCalculator {
                         return new Score(new Player(playerName), frames);
                     }).collect(Collectors.toList());
         } catch (ScoreFileValidationException | IOException e) {
-            System.err.println("ERROR: " + e.getMessage());
+            System.err.println("ERROR: " + e);
         }
         return new ScoreData(scores);
     }
@@ -42,9 +42,6 @@ public class ScoreCalculatorFromFile implements ScoreCalculator {
         final Queue<Integer> adjustScoreForStrikes = new LinkedList<>();
         for (int i = 0; i < scores.size(); i++) {
             final String ballRollScore = scores.get(i).getBallScore();
-            /*if (!(frameNumber == Score.MAX_NUMBER_OF_FRAMES_PER_GAME && currentFrame.hasStrike())) {
-                currentFrame.setBallRollScore(ballRollScore);
-            }*/
             currentFrame.setBallRollScore(ballRollScore);
             // Rule for spare: you get 10 pins + your next ball
             if (spareDetected) {
@@ -66,7 +63,6 @@ public class ScoreCalculatorFromFile implements ScoreCalculator {
                             arrayIndexIsValid(frameNumber - 3) ? frames[frameNumber - 3] : null;
                     // Adjusts the score for that element with the values from plusScoresToBeAdded queue
                     String firstScoreToAdd, secondScoreToAdd;
-                    //if (frameNumber != 10) {
                     if (previousFromLast != null && previousFromLast.hasStrike()
                             && !previousFromLast.isFinished() && lastElem != null
                             && lastElem.hasStrike()) { // && !currentFrame.hasStrike()
@@ -79,7 +75,6 @@ public class ScoreCalculatorFromFile implements ScoreCalculator {
                     }
                     frames[idxToAdjust].adjustToFinalScore(firstScoreToAdd);
                     frames[idxToAdjust].adjustToFinalScore(secondScoreToAdd);
-                    //}
 
                     // Gets the previous from the previous index and adds the previous from the previous score
                     final int idxPreviousPrevious = idxToAdjust - 1;

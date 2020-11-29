@@ -15,7 +15,8 @@ public class ConsolePrinterWithTabs implements Printer {
 
     @Override
     public void print() {
-        // System.out.println(scoreData);
+        if (scoreData.getScores().isEmpty()) return;
+
         // Frames
         printFrames();
         scoreData.getScores().forEach(score -> {

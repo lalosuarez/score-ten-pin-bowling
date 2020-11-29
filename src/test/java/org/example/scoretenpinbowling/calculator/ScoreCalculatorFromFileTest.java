@@ -2,15 +2,48 @@ package org.example.scoretenpinbowling.calculator;
 
 import org.example.scoretenpinbowling.file.ScoreFileRow;
 import org.example.scoretenpinbowling.file.SimpleScoreFileReader;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.junit.Assert.assertEquals;
 
 public class ScoreCalculatorFromFileTest {
+
+    @Test
+    public void testCalculateSuccess() {
+        final ScoreCalculator calculator =
+                new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/score.tsv"));
+        final ScoreData scoreData = calculator.calculate();
+        final List<Score> scores = scoreData.getScores();
+        assertEquals("Should contain data for 2 users", 2, scores.size());
+
+        List<Score> johnScores = scores.stream()
+                .filter(score -> score.getPlayer().getName().equals("John"))
+                .collect(Collectors.toList());
+        final Frame[] frames = johnScores.get(0).getFrames();
+
+        assertEquals("Should contain 10 frames", 10, frames.length);
+        assertEquals(16, frames[0].getScore());
+        assertEquals(25, frames[1].getScore());
+        assertEquals(44, frames[2].getScore());
+        assertEquals(53, frames[3].getScore());
+        assertEquals(82, frames[4].getScore());
+        assertEquals(101, frames[5].getScore());
+        assertEquals(110, frames[6].getScore());
+        assertEquals(124, frames[7].getScore());
+        assertEquals(132, frames[8].getScore());
+        assertEquals(151, frames[9].getScore());
+    }
+
+    @Test
+    public void testCalculateFailure(){
+        final ScoreCalculator calculator =
+                new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/invalid-content.tsv"));
+        assertEquals("Should contain any data", 0, calculator.calculate().getScores().size());
+    }
 
     @Test
     public void testProcessScoresByPlayerScenario1() {
@@ -70,7 +103,6 @@ public class ScoreCalculatorFromFileTest {
         assertEquals(54, frames[6].getScore());
         assertEquals(71, frames[7].getScore());
         assertEquals(78, frames[8].getScore());
-        //
         assertEquals(100, frames[9].getScore());
     }
 
