@@ -54,6 +54,13 @@ public class SimpleScoreFileReader implements ScoreFileReader {
         if (scoreFileRow.getBallScore() == null || scoreFileRow.getBallScore().trim().isEmpty()) {
             throw new ScoreFileValidationException("File contains rows with invalid scores");
         }
+
+        if (!scoreFileRow.getBallScore().matches("^(?:[0-9]|0[0-9]|10)$")) {
+            if (!"f".equalsIgnoreCase(scoreFileRow.getBallScore())) {
+                throw new ScoreFileValidationException("File contains rows with invalid scores values." +
+                        "\nOnly positive numbers from 0 to 10 and letter F allowed");
+            };
+        }
     }
 
     private void validateRowFormat(final String row) throws ScoreFileValidationException {
