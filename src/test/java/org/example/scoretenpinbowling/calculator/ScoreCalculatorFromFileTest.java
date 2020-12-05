@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class ScoreCalculatorFromFileTest {
 
@@ -19,6 +18,7 @@ public class ScoreCalculatorFromFileTest {
                 new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/score.tsv"));
         final ScoreData scoreData = calculator.calculate();
         final List<Score> scores = scoreData.getScores();
+        assertNull("Should not have any error", scoreData.getError());
         assertEquals("Should contain data for 2 users", 2, scores.size());
 
         final List<Score> johnScores = scores.stream()
@@ -45,7 +45,7 @@ public class ScoreCalculatorFromFileTest {
                 new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/perfect-game.tsv"));
         final ScoreData scoreData = calculator.calculate();
         final Frame[] frames = scoreData.getScores().get(0).getFrames();
-
+        assertNull("Should not have any error", scoreData.getError());
         assertEquals("Should contain 10 frames", 10, frames.length);
         assertEquals(30, frames[0].getScore());
         assertEquals(60, frames[1].getScore());
@@ -60,12 +60,20 @@ public class ScoreCalculatorFromFileTest {
     }
 
     @Test
+    public void testCalculateForMoreThrowsThanAllowed() {
+        final ScoreCalculator calculator =
+                new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/all-frames-reached.tsv"));
+        final ScoreData scoreData = calculator.calculate();
+        assertNotNull("Should have error for extra throws", scoreData.getError());
+    }
+
+    @Test
     public void testCalculateWorstGame() {
         final ScoreCalculator calculator =
                 new ScoreCalculatorFromFile(new SimpleScoreFileReader("file-samples/worst-game.tsv"));
         final ScoreData scoreData = calculator.calculate();
         final Frame[] frames = scoreData.getScores().get(0).getFrames();
-
+        assertNull("Should not have any error", scoreData.getError());
         assertEquals("Should contain 10 frames", 10, frames.length);
         assertEquals(0, frames[0].getScore());
         assertEquals(0, frames[1].getScore());

@@ -16,7 +16,7 @@ public class SimpleScoreFileReader implements ScoreFileReader {
     private static final String DEFAULT_FILE_NAME = "file-samples/score.tsv";
     private static final String TAB = "\t";
     private static final int MIN_ROWS_BY_PLAYER = 12;
-    private static final int MAX_ROWS_BY_PLAYER = 20;
+    private static final int MAX_ROWS_BY_PLAYER = 21;
 
     private final String fileName;
 

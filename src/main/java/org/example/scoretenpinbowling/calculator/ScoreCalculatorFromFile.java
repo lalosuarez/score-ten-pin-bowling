@@ -4,7 +4,9 @@ import org.example.scoretenpinbowling.file.*;
 
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 public class ScoreCalculatorFromFile implements ScoreCalculator {
@@ -26,7 +28,7 @@ public class ScoreCalculatorFromFile implements ScoreCalculator {
                         return new Score(new Player(playerName), frames);
                     }).collect(Collectors.toList());
             return new ScoreData(scores, null);
-        } catch (ScoreFileValidationException | IOException e) {
+        } catch (ScoreFileValidationException | IOException | IllegalStateException e) {
             String error = e.getMessage();
             if (e instanceof NoSuchFileException) {
                 error = "No such file: " + e.getMessage();
@@ -42,10 +44,16 @@ public class ScoreCalculatorFromFile implements ScoreCalculator {
         final Queue<Integer> adjustScoreForStrikes = new LinkedList<>();
 
         int frameNumber = 1, prevFrameIdx = -1;
-        boolean spareDetected = false, strikeDetected = false;
+        boolean spareDetected = false;
         final Frame[] frames = new Frame[MAX_NUMBER_OF_FRAMES_PER_GAME];
         Frame currentFrame = new Frame(frameNumber);
         for (int i = 0; i < scores.size(); i++) {
+
+            // Handle scenario for more throws that the allowed within 10 frames
+            if (currentFrame.isBallRollsCompleted()) {
+                throw new IllegalStateException(
+                        String.format("Max number of throws reached within 10 frames for player %s", playerName));
+            }
 
             final String ballRollScore = scores.get(i).getBallScore();
             currentFrame.setBallRollScore(ballRollScore);

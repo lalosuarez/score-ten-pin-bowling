@@ -56,7 +56,7 @@ public class Frame {
                 setBallScore(SECOND_BALL_IDX, ballRollScore);
             }
             addScore(convertToInt(ballRollScore));
-            if (!isThreeBallFrameWithSpare()) {
+            if (!isThreeBallFrameWithSpare() && !isThreeBallFrameWithStrike()) {
                 setCompleted();
             }
         } else {
@@ -154,6 +154,7 @@ public class Frame {
     }
 
     private void setFinished() { this.finished = true; }
+
     private void setCompleted() {
         this.ballRollsCompleted = true;
     }
