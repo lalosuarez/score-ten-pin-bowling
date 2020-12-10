@@ -40,13 +40,13 @@ public class ConsolePrinterWithTabs implements Printer {
     private void printPinfalls(Score score) {
         System.out.print("Pinfalls");
         Arrays.stream(score.getFrames()).forEach(frame -> {
-            for (final String ball : frame.getBallRollsScores()) {
+            Arrays.stream(frame.getBallRollsScores()).forEach(ball -> {
                 if (ball == null) {
                     System.out.print("\t");
                 } else {
                     System.out.print("\t" + ball);
                 }
-            }
+            });
         });
         System.out.print("\n");
     }

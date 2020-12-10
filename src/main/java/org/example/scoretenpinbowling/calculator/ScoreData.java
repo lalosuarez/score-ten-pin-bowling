@@ -6,8 +6,13 @@ public class ScoreData {
     private final List<Score> scores;
     private final String error;
 
-    public ScoreData(List<Score> scores, String error) {
+    public ScoreData(List<Score> scores) {
         this.scores = scores;
+        this.error = null;
+    }
+
+    public ScoreData(String error) {
+        this.scores = null;
         this.error = error;
     }
 
